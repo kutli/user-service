@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{userId}/role/{roleId}")
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<User> addRole(@PathVariable(value = "userId") Long userId,
                                         @PathVariable(value = "roleId") Long roleId) {
         final User user = userService.addRole(userId, roleId);

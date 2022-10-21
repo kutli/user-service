@@ -1,9 +1,11 @@
-package com.kutli.userservice.CustomException;
+package com.kutli.userservice.customException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,9 +25,19 @@ public class CustomExceptionHandler {
         return responseErrorMessages(messages, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorMessages> handleIllegalArgumentException(IllegalArgumentException e) {
+        return responseErrorMessages(Collections.singletonList(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessages> handleException(Exception exception) {
         return responseErrorMessages(List.of("internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessages> handleAccessDeniedException(AccessDeniedException e) {
+        return responseErrorMessages(Collections.singletonList(e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     private ResponseEntity<ErrorMessages> responseErrorMessages(List<String> messages, HttpStatus status) {

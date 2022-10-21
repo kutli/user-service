@@ -1,7 +1,7 @@
 package com.kutli.userservice.user;
 
-import com.kutli.userservice.CustomException.CustomException;
-import com.kutli.userservice.CustomException.Error;
+import com.kutli.userservice.customException.CustomException;
+import com.kutli.userservice.customException.Error;
 import com.kutli.userservice.role.Role;
 import com.kutli.userservice.role.RoleService;
 import java.util.List;

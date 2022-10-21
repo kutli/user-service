@@ -1,4 +1,4 @@
-package com.kutli.userservice.CustomException;
+package com.kutli.userservice.customException;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;

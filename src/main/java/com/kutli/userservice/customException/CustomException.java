@@ -1,4 +1,4 @@
-package com.kutli.userservice.CustomException;
+package com.kutli.userservice.customException;
 
 import lombok.Getter;
 

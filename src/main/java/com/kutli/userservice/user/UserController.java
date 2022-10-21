@@ -5,6 +5,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,9 +44,24 @@ public class UserController {
     @GetMapping(value = "/all")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<User>> getAll() {
-        List<User> users = userService.getAll();
+        final List<User> users = userService.getAll();
         return users.isEmpty() ?
             ResponseEntity.noContent().build() :
                 ResponseEntity.ok(users);
+    }
+
+    @GetMapping(value = "/pageable")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<Page<User>> getAllPageable(Pageable pageable) {
+        final Page<User> users = userService.getAllPageable(pageable);
+        return users.isEmpty() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.ok(users);
+    }
+
+    @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<User> findById(@PathVariable(value = "userId") Long userId) {
+        return ResponseEntity.ok(userService.getById(userId));
     }
 }

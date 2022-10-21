@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,5 +40,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Page<User> getAllPageable(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public User getById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 }

@@ -1,5 +1,7 @@
 package com.kutli.userservice.user;
 
+import com.kutli.userservice.CustomException.CustomException;
+import com.kutli.userservice.CustomException.Error;
 import com.kutli.userservice.role.Role;
 import com.kutli.userservice.role.RoleService;
 import java.util.List;
@@ -9,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addRole(Long userId, Long roleId) {
-        Role role = roleService.findById(roleId);
-        User user = userRepository.findById(userId).get();
+        final Role role = roleService.findById(roleId);
+        final User user = this.getById(userId);
         user.getRoles().add(role);
         return user;
     }
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(Error.USER_NOT_FOUND));
     }
 }

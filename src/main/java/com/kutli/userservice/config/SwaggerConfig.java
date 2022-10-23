@@ -2,6 +2,7 @@ package com.kutli.userservice.config;
 
 import com.google.common.collect.Lists;
 import java.util.Collections;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -14,6 +15,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@ConditionalOnExpression(value = "${USE_SWAGGER}")
 @EnableSwagger2
 public class SwaggerConfig {
 

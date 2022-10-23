@@ -126,7 +126,7 @@ public class Specs<T> {
      *
      * @param filters
      */
-    private void clearFilters(Map<String, String> filters) {
+    private static void clearFilters(Map<String, String> filters) {
         filters.remove("page");
         filters.remove("sort");
         filters.remove("size");

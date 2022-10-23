@@ -3,7 +3,10 @@ package com.kutli.userservice.user;
 
 import com.kutli.userservice.user.model.PostUser;
 import com.kutli.userservice.user.model.User;
+import com.kutli.userservice.util.MultiValueSearch;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -27,6 +31,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+
+    private final MultiValueSearch multiValueSearch;
+
+    @PostConstruct
+    public void UserController() {
+        multiValueSearch.setFilterValidValues("name", "username");
+    }
 
     @PostMapping(value = "")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
@@ -54,8 +65,9 @@ public class UserController {
 
     @GetMapping(value = "/pageable")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Page<User>> getAllPageable(Pageable pageable) {
-        final Page<User> users = userService.getAllPageable(pageable);
+    public ResponseEntity<Page<User>> getAllPageable(Pageable pageable, @RequestParam Map<String, String> filters) {
+        multiValueSearch.filterValuesValidation(filters);
+        final Page<User> users = userService.getAllPageable(pageable, filters);
         return users.isEmpty() ?
                 ResponseEntity.noContent().build() :
                 ResponseEntity.ok(users);

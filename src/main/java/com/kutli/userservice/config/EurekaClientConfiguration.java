@@ -5,8 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile(value= {"dev", "qa", "prod"})
-@EnableEurekaClient
+//@Profile(value= {"dev", "qa", "prod"})
+//@Profile("!default")
+//@EnableEurekaClient
 public class EurekaClientConfiguration {
 
 }

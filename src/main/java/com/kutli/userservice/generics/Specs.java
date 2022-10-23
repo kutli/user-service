@@ -26,8 +26,6 @@ public class Specs<T> {
      *
      * @param filters the map with filters. This map has the fields on the keys and
      *                the search values on the mapped values(field, search value).
-     *                Example of a valid map: <blockquote> (firstName,
-     *                Steph,Demetrio)<br>
      *                (site.name, GDL) </blockquote>
      * @return the Specification to filter.
      */

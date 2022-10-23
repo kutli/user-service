@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ComponentScan
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class UserServiceApplication {
 

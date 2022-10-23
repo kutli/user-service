@@ -1,9 +1,11 @@
 package com.kutli.userservice.user;
 
 import com.kutli.userservice.customException.CustomException;
-import com.kutli.userservice.customException.Error;
+import com.kutli.userservice.customException.ErrorMessage;
 import com.kutli.userservice.role.Role;
 import com.kutli.userservice.role.RoleService;
+import com.kutli.userservice.user.model.PostUser;
+import com.kutli.userservice.user.model.User;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +28,9 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
 
     @Override
-    public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public User save(PostUser postUser) {
+        postUser.setPassword(passwordEncoder.encode(postUser.getPassword()));
+        return userRepository.save(postUser);
     }
 
     @Override
@@ -50,7 +53,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(Long userId) {
+        log.info(String.valueOf(userId));
         return userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(Error.USER_NOT_FOUND));
+                .orElseThrow(() -> CustomException.builder()
+                        .errorMessage(ErrorMessage.USER_NOT_FOUND)
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .field("userId")
+                        .value(String.valueOf(userId))
+                        .build());
     }
 }

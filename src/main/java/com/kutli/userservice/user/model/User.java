@@ -1,8 +1,6 @@
-package com.kutli.userservice.user;
+package com.kutli.userservice.user.model;
 
 import com.kutli.userservice.role.Role;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -28,7 +26,6 @@ public class User {
     private Long id;
     private String name;
     private String username;
-    private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 }

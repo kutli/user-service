@@ -1,6 +1,8 @@
 package com.kutli.userservice.user;
 
 
+import com.kutli.userservice.user.model.PostUser;
+import com.kutli.userservice.user.model.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +30,8 @@ public class UserController {
 
     @PostMapping(value = "")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<User> create(@RequestBody User user) {
-        user = userService.save(user);
+    public ResponseEntity<User> create(@RequestBody PostUser postUser) {
+        User user = userService.save(postUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
@@ -59,7 +61,7 @@ public class UserController {
                 ResponseEntity.ok(users);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{userId}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<User> findById(@PathVariable(value = "userId") Long userId) {
         return ResponseEntity.ok(userService.getById(userId));

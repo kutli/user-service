@@ -15,34 +15,39 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorMessages> handleAppException(CustomException exception) {
-        return responseErrorMessages(List.of(exception.getMessage()), exception.getError().getStatus());
+    public ResponseEntity<ErrorDetails> handleCustomException(CustomException exception) {
+        ErrorDetails errorMessages = ErrorDetails.builder()
+                .errorMessage(exception.getErrorMessage())
+                .field(exception.getField())
+                .value(exception.getValue())
+                .build();
+        return ResponseEntity.status(exception.getHttpStatus()).body(errorMessages);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessages> handleValidationError(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorDetails> handleValidationError(MethodArgumentNotValidException exception) {
         List<String> messages = exception.getBindingResult().getFieldErrors().stream().map(this::createFieldErrorMessage).collect(Collectors.toList());
-        return responseErrorMessages(messages, HttpStatus.UNPROCESSABLE_ENTITY);
+        return responseErrorDetails(messages, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorMessages> handleIllegalArgumentException(IllegalArgumentException e) {
-        return responseErrorMessages(Collections.singletonList(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorDetails> handleIllegalArgumentException(IllegalArgumentException e) {
+        return responseErrorDetails(Collections.singletonList(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMessages> handleException(Exception exception) {
-        return responseErrorMessages(List.of("internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorDetails> handleException(Exception exception) {
+//        return responseErrorDetails(List.of("internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorMessages> handleAccessDeniedException(AccessDeniedException e) {
-        return responseErrorMessages(Collections.singletonList(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorDetails> handleAccessDeniedException(AccessDeniedException e) {
+        return responseErrorDetails(Collections.singletonList(e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    private ResponseEntity<ErrorMessages> responseErrorMessages(List<String> messages, HttpStatus status) {
-        ErrorMessages errorMessages = new ErrorMessages();
-        messages.forEach(errorMessages::append);
+    private ResponseEntity<ErrorDetails> responseErrorDetails(List<String> messages, HttpStatus status) {
+        ErrorDetails errorMessages = ErrorDetails.builder().build();
+        messages.forEach(errorMessages::appendBody);
         return ResponseEntity.status(status).body(errorMessages);
     }
 

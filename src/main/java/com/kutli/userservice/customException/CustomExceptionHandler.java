@@ -35,10 +35,10 @@ public class CustomExceptionHandler {
         return responseErrorDetails(Collections.singletonList(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorDetails> handleException(Exception exception) {
-//        return responseErrorDetails(List.of("internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDetails> handleException(Exception exception) {
+        return responseErrorDetails(Collections.singletonList("Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorDetails> handleAccessDeniedException(AccessDeniedException e) {

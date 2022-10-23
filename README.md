@@ -62,3 +62,7 @@ SPRING_PASSWORD=pwd
 SPRING_USER=user
 ```
 
+### Swagger UI
+
+```{HOST}/user-service/swagger-ui.html```
+
